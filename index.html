@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Josiah NSW ANZIAM 2025</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/blood.css">
+		<link rel="stylesheet" href="custom.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<p>Josiah Murray</p>
+					<h5 style="font-size: 3rem;">Infinite beams, undetermined coefficients, and the Laplace transform</h5>
+					<p style="margin-bottom: -1rem; font-size:x-large ;">Supervisors:</p>
+					<p style="font-size: xx-large; margin-bottom: 4rem;">Dr Ravi Pethiyagoda, Professor Mike Meylan, 
+						<br>Professor Natalie Thamwattana</p>
+					<div style=" display: flex; flex-direction: row; background-color: #ece9df; border-radius: 1rem; margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; height: fit-content; width: fit-content; padding: 1.5rem">
+						<img src="Figures/Logos/UON_Alternative.svg" style="height: 5rem; width: 5rem; margin: 1rem; ">
+						<div style="width: 4rem;"></div>
+						<img src="Figures/Logos/PC formatted Stacked ARC logo.svg" style="height: 5rem; margin-right: 1rem;">
+					</div>
+				</section>
+
+				<!--Context-->
+
+				<section>
+
+					<section>
+
+						<div style="display: grid; grid-auto-flow: column; align-items: center;">
+							<img src="Figures/General/Annotated Track structure diagram.png" style="border-radius: 1rem; background-color: #d5d3cb; height: 20rem;" >
+							<video data-autoplay controls loop src="Videos/Sweep to blueprint.mov" style="height: 20rem; width: auto; border-radius: 1rem;object-fit: cover;"></video>
+						</div>
+						<aside class="notes">
+							Give a brief overview of the railway context
+						</aside>
+
+					</section>
+
+					<section>
+						Euler-Bernoulli beam equation with viscoelastic foundation:
+						<span style="font-size: 2rem;">\[EI\partial_x^4 y + m\partial_t^2 y + C(x) \partial_t y + k(x)y = \delta(x-x_p-vt), \]</span>
+						where $C$ and $k$ are peicewise-constant functions and $v>0$.
+
+						<div style="display: grid; grid-auto-flow: column; align-items: center;">
+							<img src = "Figures/General/Beam on springs and dashpots - no infinity.png" style="background-color: var(--r-main-color); border-radius: 2rem;" >
+							<img src = "Figures/General/VariableStiffness3DRenderBevel.png" style="background-color: var(--r-main-color); border-radius: 2rem; border-width: 1rem; border-color: var(--r-main-color); border-style: solid;"> 
+						</div>
+						<aside class="notes">
+							Talk through the model briefly. Should the diagram move?
+						</aside>
+					</section>
+					
+
+
+				</section>
+
+				<!--Solution process-->
+				<section>
+					
+					<section data-auto-animate="">
+						<h5>Laplace domain solution:</h5>
+						<div class="SolutionStepBox">
+							<div >
+								<p style="font-size: 1.5rem;">1. Split domain</p>
+								<video data-autoplay loop controls src="Videos/0001-0090.mkv" style="border-radius: 1rem; object-fit: fill; width: 17rem;"></video>
+							</div>
+
+							<div>
+								<p style="font-size: 1.5rem;">2. Apply Laplace transform</p>
+								<p style="font-size: 0.7rem; text-align: center;">
+						\[EI\partial_x^4 y + m\partial_t^2 y + C(x) \partial_t y + k(x)y = \delta(x-vt)\]
+						$\downarrow$
+							\[\begin{split}EI\partial_x^4 \bar{y} &+ \left[ms^2 + Cs + k\right] \bar{y} =\\ & \big[ ms+C(x) \big] y(x,0)\\ &+ m\partial_t y(x,0)\\ &+  \frac{P}{v}e^{-s(x-x_p)/v}H(x-x_p)\end{split}\]
+						</p>
+								
+							</div>
+
+							<div>
+								<p style="font-size: 1.5rem;">3. Solve ODE in $x$</p>
+								<p style="font-size: 1rem;"> 
+									Apply ansatz $e^{r(s)x}$ giving characteristic polynomial
+									\[EIr^4 + (ms^2 + Cs + k) = 0,\]
+									and search for particular solutions of the form 
+									$Ae^{B x}$
+								</p>
+								
+							</div>
+
+							<div>
+								<p style="font-size: 1.5rem;">4. Solve for unknown coefficients</p>
+								<p style="font-size: 1rem;"> 
+									Enforce continuity of function and derivatives in $x$. This results in a linear system for the unknown coefficients in each region.
+								</p>
+								
+							</div>
+							
+
+
+
+						</div>
+
+						
+						<p data-id="LDS" style="font-size: 1rem; margin-top: 2rem; color: black; background-color: var(--r-main-color); padding: 1rem; border-radius: 1rem; text-shadow: none;">
+						\[\begin{split}\bar y_j(x,s) = &\sum_{q=1}^4 b_{q,j}(s) e^{r_{q,j}(s)x} + \frac{P e^{-s(x-x_p)/v}H(x-x_p)}{v\left( EI{(s/v)}^4 + ms^2 +C_j s + k_j \right)}\\ + &\begin{cases}
+								\frac{\mu_1(ms+C_j-vm\omega_1)}{EI\omega_1^4+ms^2+C_js+k_j}e^{\omega_1(x-x_p)} + \frac{\mu_2(ms+C_j-vm\omega_2)}{EI\omega_2^4+ms^2+C_js+k_j}e^{\omega_2(x-x_p)}, & x-x_p<0,\\ 
+								\frac{\mu_3(ms+C_j-vm\omega_3)}{EI\omega_3^4+ms^2+C_js+k_j}e^{\omega_3(x-x_p)} + \frac{\mu_4(ms+C_j-vm\omega_4)}{EI\omega_4^4+ms^2+C_js+k_j}e^{\omega_4(x-x_p)},& x-x_p>0,
+						\end{cases}\\ \end{split}\]
+						</p>
+
+						<aside class="notes">
+							
+							Broadly speaking, there are four steps. Of these, the last two are the most interesting.
+						</aside>
+					</section>
+
+					<section data-auto-animate>
+						<h5>
+							Time-domain solution:
+						</h5>
+
+						<p data-id="LDS" style="font-size: 1rem; margin-top: 2rem; color: black; background-color: var(--r-main-color); padding: 1rem; border-radius: 1rem; text-shadow: none;">
+						\[\begin{split}\bar y_j(x,s) = &\sum_{q=1}^4 b_{q,j}(s) e^{r_{q,j}(s)x} + \frac{P e^{-s(x-x_p)/v}H(x-x_p)}{v\left( EI{(s/v)}^4 + ms^2 +C_j s + k_j \right)}\\ + &\begin{cases}
+								\frac{\mu_1(ms+C_j-vm\omega_1)}{EI\omega_1^4+ms^2+C_js+k_j}e^{\omega_1(x-x_p)} + \frac{\mu_2(ms+C_j-vm\omega_2)}{EI\omega_2^4+ms^2+C_js+k_j}e^{\omega_2(x-x_p)}, & x-x_p<0,\\ 
+								\frac{\mu_3(ms+C_j-vm\omega_3)}{EI\omega_3^4+ms^2+C_js+k_j}e^{\omega_3(x-x_p)} + \frac{\mu_4(ms+C_j-vm\omega_4)}{EI\omega_4^4+ms^2+C_js+k_j}e^{\omega_4(x-x_p)},& x-x_p>0,
+						\end{cases}\\ \end{split}\]
+						</p>
+						<p style="font-size: 1.5rem;">An analytical solution is not achievable (especially for arbitrarily many transition zones), so we use a numerical technique. Examples include:</p>
+
+						<div style="display: grid; grid-template-columns: auto auto auto; justify-content: center;">
+							<div class="NILapExample">
+								<h2> Bromwich Contour</h2>
+								<p>Direct Quadrature</p>
+								<p>Talbot method</p>
+								<p>Fourier series</p>
+
+							</div>
+
+							<div class="NILapExample">
+								<h2>Expansions</h2>
+								<p>Weeks' method</p>
+								<p>Schappery's method</p>
+								<p>Papoulis'  method</p>
+							</div>
+
+							<div class="NILapExample">
+								<h2>Post-Widder</h2>
+								<p>Gaver's method</p>
+								<p>Gaver-Stehfest</p>
+								<p>GWR</p>
+
+							</div>
+						</div>
+
+					</section>
+
+					<section>
+
+						<div class="InversionList">
+
+							<div>
+								<h2>
+									DQ
+								</h2>
+								<div>
+									<p>Pros:</p>
+									<ul>
+										<li>
+											Easily implemented.
+										</li>
+										<li>
+											Intuitive parameters (e.g. discretisation width).
+										</li>
+									</ul>
+
+									<p>Cons:</p>
+									<ul>
+										<li>
+											Computationally expensive.
+										</li>
+										<li>
+											Gibbs phenomenon at $t=0$.
+										</li>
+									</ul>
+
+								</div>
+								
+							</div>
+
+							<div>
+								<h2>
+									Weeks
+								</h2>
+								<div>
+
+									<p>Pros:</p>
+									<ul>
+										<li>
+											Low cost for large number of sampled times.
+										</li>
+										<li>
+											Accurate inversion at $t=0$.
+										</li>
+									</ul>
+									<p>Cons:</p>
+									<ul>
+										<li>
+											Expensive for fewer times.
+										</li>
+										<li>
+											Important but unintuitive parameters.
+										</li>
+									</ul>
+
+								</div>
+
+							</div>
+							
+							<div>
+								<h2>
+									GWR
+								</h2>
+								<div>
+
+									<p>Pros:</p>
+									<ul>
+										<li>
+											Only one, intuitive parameter.
+										</li>
+										<li>
+											Good convergence.
+										</li>
+									</ul>
+									
+									<p>
+										Cons:
+									</p>
+									<ul>
+										<li>
+											Requires arbitrary precision computing.
+										</li>
+										<li>
+											Cannot invert at $t=0$.
+										</li>
+									</ul>
+								</div>
+
+							</div>
+						</div>
+
+					</section>
+		
+
+
+
+				</section>
+
+				<!--Results-->
+				<section>
+
+					<section>
+						<h5 style="font-size: 2rem;">Weeks' method works well for low speeds:</h5>
+						<div style=" display: flex; flex-direction: row; border-radius: 1rem; margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; width: fit-content; padding: 1.5rem; align-items: center;">
+
+							<div style=" display: flex; flex-direction: row; border-radius: 1rem; width: fit-content; padding: 1.5rem; align-items: center; background-color: white; border-radius: 2rem; height: fit-content; width: fit-content;" >
+								<div style="display: flex; flex-direction: column;">
+									<img src="Videos/OneTZSlow.gif" style="width: 18vw; border-radius: 1rem;">
+									<p style="color: black; font-size: medium; margin-top: -1rem;text-shadow: none;">
+										$v=1\,\text{m/s}$ <span style="font-size: 1.3rem; color: green">&#10004</span>
+									</p>
+								</div>
+								<div style="display: flex; flex-direction: column;">
+									<img src="Videos/4TZ_slow.gif" style="width: 18vw; border-radius: 1rem;">
+									<p style="color: black; font-size: medium; margin-top: -1rem;text-shadow: none;">
+										$v=1\,\text{m/s}$ <span style="font-size: 1.3rem; color: green">&#10004</span>
+									</p>
+								</div>
+								
+								<div style="display: flex; flex-direction: column;">
+									<img src="Videos/FastNoTZ.gif" style="width: 18vw;">
+									<p style="color: black; font-size: medium; margin-top: -1rem; text-shadow: none;">
+										$v=30\,\text{m/s}$ <span style="color: red; font-size: 1.2rem;">&#10008</span>
+									</p>
+								</div>
+								
+								
+							</div>
+							
+						</div>
+						<div class="AnimLegend" style="width: 40rem; height: 4rem; background-color: var(--r-main-color); margin-left: auto; margin-right: auto; border-radius: 1rem;
+						display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 1rem;">
+						
+						<div style="width: 3rem; height: 0rem; border-top: 0.2rem solid #803366; margin-right:0.5rem;">
+						</div>
+						<p style="font-size: 1rem; text-shadow: none; color: black; font-weight: bold;">Beam deformation</p>
+
+						<div style="width:2rem;"></div>
+						
+						<div style="width: 3rem; height: 0rem; border-top: 0.2rem dashed black;">
+						</div>
+						<p style="font-size: 1rem; text-shadow: none; color: black; font-weight: bold; margin-left: 0rem;">Travelling wave solution</p>
+
+						
+
+						
+
+						</div>
+
+						
+					</section>
+
+					<section>
+						<h5 style="font-size: 2rem;">GWR gives gives much better convergence vs. computation time:</h5>
+						
+						<div class="InversionList">
+
+
+							<div>
+								<h2>
+									DQ
+								</h2>
+									
+								<img src="Figures/General/Comparisons/SCALED - DQ_Fast_steadyState_Comparison.svg">
+								
+							</div>
+
+							<div>
+								<h2>
+									Weeks
+								</h2>
+								
+								<img src = "Figures/General/Comparisons/SCALED - Weeks_fast_steadyState_Comparison_NVals.svg">
+
+							</div>
+							
+							<div>
+								<h2>
+									GWR
+								</h2>
+
+								<img src="Figures/General/Comparisons/SCALED - GWR_steadyState_Comparison_v30.svg">
+							</div>
+								
+						</div>
+
+						<p style="font-size: 2rem;" >Comparison of relative L2 errors in $x$ over time, when recovering the travelling wave solution for $v=30\,\text{m/s}$.  </p>
+
+					</section>
+						
+						
+
+					<section>
+
+						<div style="display: flex; flex-direction: row; align-items: center;">
+
+							<div style="align-items: center;">
+								<p style=" width:25rem; font-size: 1.4rem; margin-bottom:0.5rem; text-align: center; margin-right: auto; margin-left: auto;">
+									Travelling wave successfully recovered for $v=30\,\text{m/s}$ using GWR:
+								</p>
+								<img src="Figures/General/Demonstration_fast_GWR.svg" style="height: 27rem; padding: 0.5rem; background-color: white; border-radius: 1rem;">
+
+							</div>
+							<div style="width:8rem"></div>
+
+							<div>
+								<h5>Main points:</h5>
+								<ul class="SpacedList"style="font-size: 1.5rem;">
+									<li>
+										To solve piecewise-constant beam equation:
+										split solution domain $\to$ Laplace transform $\to$ undetermined coefficients 
+									</li>
+									<li>
+										Direct quadrature method is robust and accessible.
+									</li>
+									<li>
+										Weeks' method is great for small velocities and generating animations.
+									</li>
+									<li>
+										GWR gives the best convergence, especially at larger velocities.
+									</li>
+								</ul>
+							</div>
+
+						</div>
+						
+					</section>
+
+
+
+				</section>
+
+				<!--Extra stuff-->
+				<section data-background-video="Videos/AmbientRailLoop.mov" data-background-video-loop data-background-video-muted>
+					<div style="width: fit-content; background-color: var(--r-background-color); padding: 1rem; border-radius: 1rem; border-width: 0.2rem; border-style: solid; border-color: var(--r-main-color); position: absolute; bottom: -30rem; left: 2rem;">
+						<p style="font-size: large;">
+						This research was supported by the Australian Government through the ARC's
+						Discovery Projects funding scheme (project DP22010286). The views expressed herein are those of the
+						authors and are not necessarily those of the Australian Government or the ARC.
+					</p>
+					</div>
+					
+					
+				</section>
+			</div>
+		</div>
+
+		
+		<script src="plugin/math/math.js"></script>
+		<script src="plugin/zoom/zoom.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom, RevealMath.MathJax3, RevealNotes]
+			});
+		</script>
+	</body>
+</html>
