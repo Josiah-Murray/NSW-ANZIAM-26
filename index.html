@@ -8,7 +8,7 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/blood.css">
+		<link rel="stylesheet" href="dist/theme/moon.css">
 		<link rel="stylesheet" href="custom.css">
 
 		<!-- Theme used for syntax highlighted code -->
@@ -19,7 +19,7 @@
 			<div class="slides">
 				<section>
 					<p>Josiah Murray</p>
-					<h5 style="font-size: 3rem;">Infinite beams, undetermined coefficients, and the Laplace transform</h5>
+					<h5 style="font-size: 3rem;">Movement of cracked sea ice using the Laplace transform</h5>
 					<p style="margin-bottom: -1rem; font-size:x-large ;">Supervisors:</p>
 					<p style="font-size: xx-large; margin-bottom: 4rem;">Dr Ravi Pethiyagoda, Professor Mike Meylan, 
 						<br>Professor Natalie Thamwattana</p>
@@ -35,29 +35,67 @@
 				<section>
 
 					<section>
-
+						Builds on railway work
 						<div style="display: grid; grid-auto-flow: column; align-items: center;">
 							<img src="Figures/General/Annotated Track structure diagram.png" style="border-radius: 1rem; background-color: #d5d3cb; height: 20rem;" >
 							<video data-autoplay controls loop src="Videos/Sweep to blueprint.mov" style="height: 20rem; width: auto; border-radius: 1rem;object-fit: cover;"></video>
 						</div>
+
+
 						<aside class="notes">
-							Give a brief overview of the railway context
+							Mention that this work builds on some railway things.
 						</aside>
 
 					</section>
 
 					<section>
-						Euler-Bernoulli beam equation with viscoelastic foundation:
-						<span style="font-size: 2rem;">\[EI\partial_x^4 y + m\partial_t^2 y + C(x) \partial_t y + k(x)y = \delta(x-x_p-vt), \]</span>
-						where $C$ and $k$ are peicewise-constant functions and $v>0$.
-
-						<div style="display: grid; grid-auto-flow: column; align-items: center;">
-							<img src = "Figures/General/Beam on springs and dashpots - no infinity.png" style="background-color: var(--r-main-color); border-radius: 2rem;" >
-							<img src = "Figures/General/VariableStiffness3DRenderBevel.png" style="background-color: var(--r-main-color); border-radius: 2rem; border-width: 1rem; border-color: var(--r-main-color); border-style: solid;"> 
+						Now sea ice! 
+						<div style="display: flex; flex-direction: row;">
+							<img src="Figures/Ice shelf diagram with crack.svg" style="width: 30%; background-color: white; border-radius: 4rem; margin-right: 1rem" >
+						<p style="font-size: 1rem;">
+						\[
+						\begin{align}
+							D\partial_x^4\eta(x,t) + \rho_I d \partial_t^2\eta(x,t) + Q\partial_x^2\eta(x,t)&&&\nonumber\\ + \rho_w g \eta(x,t) + \rho_w\partial_t\phi(x,0,t)  = F(x,t),&&\text{(Ice surface equation)}&\\
+							\Delta \phi(x,z,t) = 0,&&\text{(Fluid equation)}&\\
+							\partial_z\phi(x,-h,t) = 0,&&\text{(Sea floor no-flow condition)}&\\
+							\partial_t\eta(x,t) = \partial_z\phi(x,0,t),&&\text{(Kinematic surface condition)}&\\
+							D\partial_x^2\partial_z\phi(x_c^\pm,0,t) = 0,&&\text{(Zero bending moment at crack)}&\\
+							D\partial_x^3\partial_z\phi(x_c^\pm,0,t) + Q\partial_x\partial_z\phi(x_c^\pm,0,t) = 0,&&\text{(Zero shear stress at crack)}&
+						\end{align}
+						
+						\]</p>
 						</div>
 						<aside class="notes">
-							Talk through the model briefly. Should the diagram move?
 						</aside>
+					</section>
+
+
+					<section>
+											
+						<ol>
+							<li>
+								Apply Laplace transform
+							</li>
+							<li>Find general solution
+						<ul>
+							<li>
+								Homogeneous solution
+							</li>
+							<li>
+								Particular solution (moving point force)
+							</li>
+						</ul>
+						</li>
+						<li>Apply boundary conditions between regions</li>
+						<li>
+							Invert Laplace transform numerically
+						</li>
+						</ol>
+						
+						<aside class="notes">
+							These steps are the same as for railways, but the details are different.
+						</aside>
+
 					</section>
 					
 
@@ -67,196 +105,90 @@
 				<!--Solution process-->
 				<section>
 					
-					<section data-auto-animate="">
-						<h5>Laplace domain solution:</h5>
-						<div class="SolutionStepBox">
-							<div >
-								<p style="font-size: 1.5rem;">1. Split domain</p>
-								<video data-autoplay loop controls src="Videos/0001-0090.mkv" style="border-radius: 1rem; object-fit: fill; width: 17rem;"></video>
-							</div>
+					<section>
 
-							<div>
-								<p style="font-size: 1.5rem;">2. Apply Laplace transform</p>
-								<p style="font-size: 0.7rem; text-align: center;">
-						\[EI\partial_x^4 y + m\partial_t^2 y + C(x) \partial_t y + k(x)y = \delta(x-vt)\]
-						$\downarrow$
-							\[\begin{split}EI\partial_x^4 \bar{y} &+ \left[ms^2 + Cs + k\right] \bar{y} =\\ & \big[ ms+C(x) \big] y(x,0)\\ &+ m\partial_t y(x,0)\\ &+  \frac{P}{v}e^{-s(x-x_p)/v}H(x-x_p)\end{split}\]
-						</p>
-								
-							</div>
-
-							<div>
-								<p style="font-size: 1.5rem;">3. Solve ODE in $x$</p>
-								<p style="font-size: 1rem;"> 
-									Apply ansatz $e^{r(s)x}$ giving characteristic polynomial
-									\[EIr^4 + (ms^2 + Cs + k) = 0,\]
-									and search for particular solutions of the form 
-									$Ae^{B x}$
-								</p>
-								
-							</div>
-
-							<div>
-								<p style="font-size: 1.5rem;">4. Solve for unknown coefficients</p>
-								<p style="font-size: 1rem;"> 
-									Enforce continuity of function and derivatives in $x$. This results in a linear system for the unknown coefficients in each region.
-								</p>
-								
-							</div>
-							
-
-
-
+						<p style="font-size: 1rem;">\[D\partial_x^4\partial_z\bar\phi(x,0,s) + s^2\rho_I d \partial_z\bar\phi(x,0,s) + Q\partial_x^2\partial_z\bar\phi(x,0,s) + \rho_w g \partial_z\bar\phi(x,0,s) + s^2\rho_w\bar\phi(x, 0 ,s)  = s\bar F(x,s)\]</p>
+						<div style="width: 80%; height: 2rem; margin-left: auto; margin-right: auto; margin-bottom: -2rem; background-color: white;"></div>
+						<div style="width: 80%; height: 14rem; margin-top: -1rem; margin-right: auto; margin-left: auto; background-color: #52b4d5;">
+							<p style="color: black; font-size: 1rem; align-content: center;">\[\Delta \bar \phi(x,z,s) = 0 \] <span style="font-size: larger">\[\Downarrow \]</span> \[ \bar\phi_h(x,z,s) = \sum_{n=1}^\infty a_ne^{\text{i}k_n(s)x}\frac{\cosh(k_n(s)z+k_n(s)h)}{\cosh(k_n(s)h)} \]  <span style="font-size: 0.7rem;">\[ \left[Dk^4 - Qk^2 + (\rho_I d s^2 + \rho_w g)\right]k\tanh(kh) + \rho_w s^2 = 0.\]</span></p>
 						</div>
-
-						
-						<p data-id="LDS" style="font-size: 1rem; margin-top: 2rem; color: black; background-color: var(--r-main-color); padding: 1rem; border-radius: 1rem; text-shadow: none;">
-						\[\begin{split}\bar y_j(x,s) = &\sum_{q=1}^4 b_{q,j}(s) e^{r_{q,j}(s)x} + \frac{P e^{-s(x-x_p)/v}H(x-x_p)}{v\left( EI{(s/v)}^4 + ms^2 +C_j s + k_j \right)}\\ + &\begin{cases}
-								\frac{\mu_1(ms+C_j-vm\omega_1)}{EI\omega_1^4+ms^2+C_js+k_j}e^{\omega_1(x-x_p)} + \frac{\mu_2(ms+C_j-vm\omega_2)}{EI\omega_2^4+ms^2+C_js+k_j}e^{\omega_2(x-x_p)}, & x-x_p<0,\\ 
-								\frac{\mu_3(ms+C_j-vm\omega_3)}{EI\omega_3^4+ms^2+C_js+k_j}e^{\omega_3(x-x_p)} + \frac{\mu_4(ms+C_j-vm\omega_4)}{EI\omega_4^4+ms^2+C_js+k_j}e^{\omega_4(x-x_p)},& x-x_p>0,
-						\end{cases}\\ \end{split}\]
-						</p>
-
+						<p style="font-size: 1rem;">\[\partial_z \bar\phi(x,-h,s) = 0\] </p>
 						<aside class="notes">
 							
-							Broadly speaking, there are four steps. Of these, the last two are the most interesting.
 						</aside>
 					</section>
 
-					<section data-auto-animate>
-						<h5>
-							Time-domain solution:
-						</h5>
+					<section>
+						<div style="display: flex; flex-direction: row; align-items: center; margin-left: auto; margin-right: auto;">
+							<img src = "Figures/Pole locations.svg" style="background-color: #e5f3f3; border-radius: 4rem; width: 20rem; border-color: black; border-width: 1rem; border-style: solid;">
+							<div>
+								<h5>Roots of dispersion relation:</h5>
+								<span style="font-size: large;">\[ \left[Dk^4 - Qk^2 + (\rho_I d s^2 + \rho_w g)\right]k\tanh(kh) + \rho_w s^2 = 0.\]</span>
+								<ul class="SpacedList"style="font-size: 1.5rem; width: 30rem; margin-left:4rem">
+									<li>
+										Position depends on Laplace variable.
+									</li>
+									<li>
+										Six blue roots correspond to roots in 'shallow water' limit.
+									</li>
 
-						<p data-id="LDS" style="font-size: 1rem; margin-top: 2rem; color: black; background-color: var(--r-main-color); padding: 1rem; border-radius: 1rem; text-shadow: none;">
-						\[\begin{split}\bar y_j(x,s) = &\sum_{q=1}^4 b_{q,j}(s) e^{r_{q,j}(s)x} + \frac{P e^{-s(x-x_p)/v}H(x-x_p)}{v\left( EI{(s/v)}^4 + ms^2 +C_j s + k_j \right)}\\ + &\begin{cases}
-								\frac{\mu_1(ms+C_j-vm\omega_1)}{EI\omega_1^4+ms^2+C_js+k_j}e^{\omega_1(x-x_p)} + \frac{\mu_2(ms+C_j-vm\omega_2)}{EI\omega_2^4+ms^2+C_js+k_j}e^{\omega_2(x-x_p)}, & x-x_p<0,\\ 
-								\frac{\mu_3(ms+C_j-vm\omega_3)}{EI\omega_3^4+ms^2+C_js+k_j}e^{\omega_3(x-x_p)} + \frac{\mu_4(ms+C_j-vm\omega_4)}{EI\omega_4^4+ms^2+C_js+k_j}e^{\omega_4(x-x_p)},& x-x_p>0,
-						\end{cases}\\ \end{split}\]
-						</p>
-						<p style="font-size: 1.5rem;">An analytical solution is not achievable (especially for arbitrarily many transition zones), so we use a numerical technique. Examples include:</p>
-
-						<div style="display: grid; grid-template-columns: auto auto auto; justify-content: center;">
-							<div class="NILapExample">
-								<h2> Bromwich Contour</h2>
-								<p>Direct Quadrature</p>
-								<p>Talbot method</p>
-								<p>Fourier series</p>
-
-							</div>
-
-							<div class="NILapExample">
-								<h2>Expansions</h2>
-								<p>Weeks' method</p>
-								<p>Schappery's method</p>
-								<p>Papoulis'  method</p>
-							</div>
-
-							<div class="NILapExample">
-								<h2>Post-Widder</h2>
-								<p>Gaver's method</p>
-								<p>Gaver-Stehfest</p>
-								<p>GWR</p>
-
+									<li>
+										Four off-axis roots correspond to roots of Euler-Bernoulli beam.
+									</li>
+								</ul>
 							</div>
 						</div>
+						
 
 					</section>
 
 					<section>
 
-						<div class="InversionList">
+						<p style="font-size: 2rem;">\[ \bar\phi(x,z,s) = \sum_{n=1}^\infty a_ne^{\text{i}k_n(s)x}\frac{\cosh(k_n(s)z+k_n(s)h)}{\cosh(k_n(s)h)} + \bbox[10px, border: 4px solid #cfcfff]{\phi_p(x,z,s)} \]  <span style="font-size: 1.5rem;">\[ \left[Dk^4 - Qk^2 + (\rho_I d s^2 + \rho_w g)\right]k\tanh(kh) + \rho_w s^2 = 0.\]</span></p>
 
-							<div>
-								<h2>
-									DQ
-								</h2>
-								<div>
-									<p>Pros:</p>
-									<ul>
-										<li>
-											Easily implemented.
-										</li>
-										<li>
-											Intuitive parameters (e.g. discretisation width).
-										</li>
-									</ul>
+					</section>
 
-									<p>Cons:</p>
-									<ul>
-										<li>
-											Computationally expensive.
-										</li>
-										<li>
-											Gibbs phenomenon at $t=0$.
-										</li>
-									</ul>
+					<section>
+						
+						<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
 
-								</div>
-								
-							</div>
-
-							<div>
-								<h2>
-									Weeks
-								</h2>
-								<div>
-
-									<p>Pros:</p>
-									<ul>
-										<li>
-											Low cost for large number of sampled times.
-										</li>
-										<li>
-											Accurate inversion at $t=0$.
-										</li>
-									</ul>
-									<p>Cons:</p>
-									<ul>
-										<li>
-											Expensive for fewer times.
-										</li>
-										<li>
-											Important but unintuitive parameters.
-										</li>
-									</ul>
-
-								</div>
-
+							<div style="font-size: 2rem; margin-right: 1rem;">
+								<h5 style="font-size: 3rem;">Stationary</h5>
+								\[F(x,t) = \delta(x-x_p)\]
+								\[\bar F(x,s) = \delta(x-x_p)/s\]
+								\[\left[ \partial_x^3\partial_z\bar\phi(x,0,s)\right]_{x=x_p^-}^{x_p^+} = \frac{1}{D}\]
+								<span style="font-size: 1.5rem;">( boundary condition, no $\phi_p$ )</span>
 							</div>
 							
-							<div>
-								<h2>
-									GWR
-								</h2>
-								<div>
-
-									<p>Pros:</p>
-									<ul>
-										<li>
-											Only one, intuitive parameter.
-										</li>
-										<li>
-											Good convergence.
-										</li>
-									</ul>
-									
-									<p>
-										Cons:
-									</p>
-									<ul>
-										<li>
-											Requires arbitrary precision computing.
-										</li>
-										<li>
-											Cannot invert at $t=0$.
-										</li>
-									</ul>
-								</div>
+							<div style="width: 0.5rem; height: 100%; background-color: var(--r-main-color); position: absolute; right: 50%; top: 0rem; border-radius: 1rem;">
 
 							</div>
-						</div>
 
+							<div style="font-size: 2rem; margin-left: 1rem;">
+								<h5 style="font-size: 3rem;">Moving</h5>
+								\[F(x,t) = \delta(x-x_p-vt)\]
+								<span style="font-size: 1.5rem;;">\[\bar F(x,s) = \frac{s}{|v|}e^{-s(x-x_p)/v}H\left( \frac{x-x_p}{v}\right)\]</span>
+								\[\phi_p = \]
+								<span style="font-size: 0.8rem;"> \[\frac{-se^{-s(x-x_p)/v}\cos(s(z+h)/v)/\cos(sh/v)}{|v|( [D(s/v)^5 + Q(s/v)^3 + (s^2\rho_I  d + \rho_wg)(s/v)]\tan(sh/v) - s^2\rho_w)}.\]</span>
+							</div>
+
+
+						</div>
+					</section>
+
+					<section>
+
+						<h6>Using Fourier transform:</h6>
+						<span style="font-size: 1.5rem;;">\[\begin{multline}
+    D\partial_x^4\partial_z\bar\phi(x,0,s) + s^2\rho_I d \partial_z\bar\phi(x,0,s) + Q\partial_x^2\partial_z\bar\phi(x,0,s)\\ + \rho_w g \partial_z\bar\phi(x,0,s) + s^2\rho_w\bar\phi(x, 0 ,s)  = \frac{s}{|v|}e^{-s(x-x_p)/v}H\left( \frac{x-x_p}{v}\right),
+\end{multline}\]</span>
+<span>Apply the Fourier transform:</span>
+<span style="font-size: 1.5rem;">\[\bar\phi_p(x,z,s) = \frac{1}{2\pi}\int_{-\infty}^\infty \frac{se^{\text{i}k(x-x_p)}\cosh(k(z+h))/\cosh(kh)}{(s+\text{i}vk)\left( [Dk^4 -Qk^2 + (s^2\rho_I d  + g\rho_w)]k\tanh(kh) + s^2\rho_w \right) }dk.\]</span>
+
+					</section>
+
+					<section>
+						<p style="font-size: 2rem;">\[ \bar\phi(x,z,s) = \sum_{n=1}^\infty \bbox[5px, border: 4px solid #cfcfff]{a_n}e^{\text{i}k_n(s)x}\frac{\cosh(k_n(s)z+k_n(s)h)}{\cosh(k_n(s)h)} + \phi_p(x,z,s) \]  <span style="font-size: 1.5rem;">\[ \left[Dk^4 - Qk^2 + (\rho_I d s^2 + \rho_w g)\right]k\tanh(kh) + \rho_w s^2 = 0.\]</span></p>
 					</section>
 		
 
@@ -264,133 +196,70 @@
 
 				</section>
 
-				<!--Results-->
+				<!--Matching conditions-->
+				<section>
+
+					
+
+					<section>
+						<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+							
+
+							<div style="font-size: 1.2rem;">
+								<h5 style="font-size: 3rem;">Stat. point force</h5>
+								\[\partial_z\bar\phi_{R}(x_p,0,s) - \partial_z\bar\phi_{L}(x_p,0,s) = 0\]
+								\[\partial_x\partial_z\bar\phi_{R}(x_p,0,s) - \partial_x\partial_z\bar\phi_{L}(x_p,0,s) = 0\]
+								\[\partial_x^2\partial_z\bar\phi_{R}(x_p,0,s) - \partial_x^2\partial_z\bar\phi_{L}(x_p,0,s) = 0\]
+								\[\partial_x^3\partial_z\bar\phi_{R}(x_p,0,s) - \partial_x^3\partial_z\bar\phi_{L}(x_p,0,s) = 1/D\]
+							</div>
+
+							<div style="font-size: 1.2rem;">
+								<h5 style="font-size: 3rem;">Crack</h5>
+								\[\partial_x^2\partial_z\bar\phi_{L}(x_c,0,s) = 0\]
+								\[\partial_x^2\partial_z\bar\phi_{R}(x_c,0,s) = 0\]
+								\[D\partial_x^3\partial_z\bar\phi_{L}(x_c,0,s) + Q \partial_x\partial_z\bar\phi_{L}(x_c,0,s) = 0\]
+								\[D\partial_x^3\partial_z\bar\phi_{R}(x_c,0,s) + Q \partial_x\partial_z\bar\phi_{R}(x_c,0,s) = 0\]
+							</div>
+						</div>
+						
+					</section>
+
+					<section>
+						<h3>Eigenfunction matching:</h3>
+						<span style="font-size: 1.5rem;">\[L(f(z);j) = \int_{-h}^0 f(z)\cos(j\pi z/h)dz,\]</span>
+   <span style="font-size: 1.5rem;"> \[\begin{align}L(\bar\phi_R;j)(x,s) - L(\bar\phi_L;j)(x,s) = 0,\quad j=0,\dots,(n-4)/2-1,\\
+    L(\partial_x\bar\phi_R;j)(x,s) - L(\partial_x\bar\phi_L;j)(x,s) = 0,\quad j=0,\dots,(n-4)/2-1.
+\end{align}\] </span>
+
+					</section>
+				
+				</section>
+
 				<section>
 
 					<section>
-						<h5 style="font-size: 2rem;">Weeks' method works well for low speeds:</h5>
-						<div style=" display: flex; flex-direction: row; border-radius: 1rem; margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; width: fit-content; padding: 1.5rem; align-items: center;">
 
-							<div style=" display: flex; flex-direction: row; border-radius: 1rem; width: fit-content; padding: 1.5rem; align-items: center; background-color: white; border-radius: 2rem; height: fit-content; width: fit-content;" >
-								<div style="display: flex; flex-direction: column;">
-									<img src="Videos/OneTZSlow.gif" style="width: 18vw; border-radius: 1rem;">
-									<p style="color: black; font-size: medium; margin-top: -1rem;text-shadow: none;">
-										$v=1\,\text{m/s}$ <span style="font-size: 1.3rem; color: green">&#10004</span>
-									</p>
-								</div>
-								<div style="display: flex; flex-direction: column;">
-									<img src="Videos/4TZ_slow.gif" style="width: 18vw; border-radius: 1rem;">
-									<p style="color: black; font-size: medium; margin-top: -1rem;text-shadow: none;">
-										$v=1\,\text{m/s}$ <span style="font-size: 1.3rem; color: green">&#10004</span>
-									</p>
-								</div>
-								
-								<div style="display: flex; flex-direction: column;">
-									<img src="Videos/FastNoTZ.gif" style="width: 18vw;">
-									<p style="color: black; font-size: medium; margin-top: -1rem; text-shadow: none;">
-										$v=30\,\text{m/s}$ <span style="color: red; font-size: 1.2rem;">&#10008</span>
-									</p>
-								</div>
-								
-								
+						<h3>Numerical inversion:</h3>
+						<h4>Gaver-Wynn rho algorithm</h4>
+						<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+							<img src="Figures/GWR algorithm.svg" style="background-color: white; border-radius: 2rem; padding:1rem; width: 40%;" />
+							<div style="font-size: 1rem;">
+								\[\begin{aligned} \label{eq: Wynn rho}
+								\rho^{(n)}_{-1} = 0, \quad\rho_{0}^{(n)}= G_{n}^{(n)},\quad 0 \le n \le M,\\ \rho_{k}^{(n)} = \rho_{k-2}^{(n+1)}+\frac{k}{\rho_{k-1}^{(n+1)} - \rho^{(n)}_{k-1}},\quad  1\le k \le M-n,
+								\end{aligned}\]
+								\[G_k^{(k)}(x,t)= \frac{k\log(2)}{t} \binom{2k}{k}\sum\limits_{j=0}^{k}(-1)^{j}\binom{k}{j} \hat y\left( x,\frac{(k+j)\log(2)}{t} \right)\]
 							</div>
-							
 						</div>
-						<div class="AnimLegend" style="width: 40rem; height: 4rem; background-color: var(--r-main-color); margin-left: auto; margin-right: auto; border-radius: 1rem;
-						display: flex; flex-direction: row; justify-content: center; align-items: center; padding: 1rem;">
-						
-						<div style="width: 3rem; height: 0rem; border-top: 0.2rem solid #803366; margin-right:0.5rem;">
-						</div>
-						<p style="font-size: 1rem; text-shadow: none; color: black; font-weight: bold;">Beam deformation</p>
-
-						<div style="width:2rem;"></div>
-						
-						<div style="width: 3rem; height: 0rem; border-top: 0.2rem dashed black;">
-						</div>
-						<p style="font-size: 1rem; text-shadow: none; color: black; font-weight: bold; margin-left: 0rem;">Travelling wave solution</p>
-
-						
-
-						
-
-						</div>
-
-						
-					</section>
-
-					<section>
-						<h5 style="font-size: 2rem;">GWR gives gives much better convergence vs. computation time:</h5>
-						
-						<div class="InversionList">
-
-
-							<div>
-								<h2>
-									DQ
-								</h2>
-									
-								<img src="Figures/General/Comparisons/SCALED - DQ_Fast_steadyState_Comparison.svg">
-								
-							</div>
-
-							<div>
-								<h2>
-									Weeks
-								</h2>
-								
-								<img src = "Figures/General/Comparisons/SCALED - Weeks_fast_steadyState_Comparison_NVals.svg">
-
-							</div>
-							
-							<div>
-								<h2>
-									GWR
-								</h2>
-
-								<img src="Figures/General/Comparisons/SCALED - GWR_steadyState_Comparison_v30.svg">
-							</div>
-								
-						</div>
-
-						<p style="font-size: 2rem;" >Comparison of relative L2 errors in $x$ over time, when recovering the travelling wave solution for $v=30\,\text{m/s}$.  </p>
-
 					</section>
 						
 						
 
 					<section>
 
-						<div style="display: flex; flex-direction: row; align-items: center;">
-
-							<div style="align-items: center;">
-								<p style=" width:25rem; font-size: 1.4rem; margin-bottom:0.5rem; text-align: center; margin-right: auto; margin-left: auto;">
-									Travelling wave successfully recovered for $v=30\,\text{m/s}$ using GWR:
-								</p>
-								<img src="Figures/General/Demonstration_fast_GWR.svg" style="height: 27rem; padding: 0.5rem; background-color: white; border-radius: 1rem;">
-
-							</div>
-							<div style="width:8rem"></div>
-
-							<div>
-								<h5>Main points:</h5>
-								<ul class="SpacedList"style="font-size: 1.5rem;">
-									<li>
-										To solve piecewise-constant beam equation:
-										split solution domain $\to$ Laplace transform $\to$ undetermined coefficients 
-									</li>
-									<li>
-										Direct quadrature method is robust and accessible.
-									</li>
-									<li>
-										Weeks' method is great for small velocities and generating animations.
-									</li>
-									<li>
-										GWR gives the best convergence, especially at larger velocities.
-									</li>
-								</ul>
-							</div>
-
-						</div>
+						<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+							<img src="Figures/variantsMoving.svg" style="width: 45%; border-radius: 3rem;">
+							<video src="Videos/Sea ice graph anim.mov" style="width: 45%; border-width: 1rem; border-style: solid; border-color: var(--r-background-color); border-radius: 4rem;" data-autoplay controls loop></video>
+	</div>
 						
 					</section>
 
@@ -399,9 +268,9 @@
 				</section>
 
 				<!--Extra stuff-->
-				<section data-background-video="Videos/AmbientRailLoop.mov" data-background-video-loop data-background-video-muted>
-					<div style="width: fit-content; background-color: var(--r-background-color); padding: 1rem; border-radius: 1rem; border-width: 0.2rem; border-style: solid; border-color: var(--r-main-color); position: absolute; bottom: -30rem; left: 2rem;">
-						<p style="font-size: large;">
+				<section data-background-video="Videos/Sea ice - Eevee.mov" data-background-video-loop data-background-video-muted>
+					<div style="width: fit-content; background-color: var(--r-background-color); padding: 1rem; border-radius: 1rem; border-width: 0.2rem; border-style: solid; border-color: var(--r-main-color); position: absolute; top: -4rem; right: 0%; ">
+						<p style="font-size: 1rem; width: 30rem; text-align: center;">
 						This research was supported by the Australian Government through the ARC's
 						Discovery Projects funding scheme (project DP22010286). The views expressed herein are those of the
 						authors and are not necessarily those of the Australian Government or the ARC.
